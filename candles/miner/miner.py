@@ -205,7 +205,7 @@ class Miner(BaseMinerNeuron):
         bittensor.logging.debug(f"Making prediction for interval: {candle_prediction.interval}")
 
         # Generate a random price between 100 and 1000
-        price = Decimal(str(random.uniform(100, 1000)))
+        price = Decimal(str(random.uniform(300, 330)))
         bittensor.logging.debug(f"Generated price: {price}")
 
         # Randomly choose a color
@@ -238,7 +238,8 @@ class Miner(BaseMinerNeuron):
         bittensor.logging.debug(
             f"Received GetCandlePrediction request in forward() from {synapse.dendrite.hotkey}." # type: ignore
         )
-
+        bittensor.logging.info(f"[red]-----------------START-------------------[/red]")
+        bittensor.logging.info(f"Synapse : {synapse}")
         synapse.candle_prediction = await self.make_candle_prediction(synapse.candle_prediction)
         synapse.version = 1
 
@@ -248,7 +249,7 @@ class Miner(BaseMinerNeuron):
             f"\n price = [orange]{synapse.candle_prediction.price}[/orange]," +
             f"\n confidence = [magenta]{synapse.candle_prediction.confidence}[/magenta]."
         )
-
+        bittensor.logging.info(f"[red]-----------------END----------------------[/red]")
         return synapse
 
     def save_state(self):

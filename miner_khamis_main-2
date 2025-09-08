@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Custom miner script for wallet: khamis, hotkey: main-2
+# Generated on: Tue Aug 19 19:17:02 BST 2025
+
+uv run candles/miner/miner.py \
+    --axon.external_ip 82.153.134.178 \
+    --netuid 31 \
+    --axon.port 8092 \
+    --wallet.name khamis \
+    --wallet.hotkey main-2 \
+    --blacklist.validator_min_stake 0 \
+    --logging.info \
+    --neuron.epoch_length 50 \
+    "$@"

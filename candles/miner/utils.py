@@ -132,7 +132,7 @@ def build_prediction(price, color, confidence, interval, timestamp, miner_uid, h
         prediction_id=int(timestamp),
         prediction_date=datetime.now(timezone.utc),  # Current UTC timestamp when prediction was made
         interval=interval,              # The time interval for this prediction
-        interval_id=f"{timestamp}::{interval}",  # Unique identifier combining timestamp and interval
+        interval_id=f"{int(timestamp)}::{interval}",  # Unique identifier combining timestamp and interval
         miner_uid=miner_uid,            # The UID of the miner making this prediction
         hotkey=hotkey,                  # The hotkey of the miner making this prediction
     )
