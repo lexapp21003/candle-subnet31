@@ -16,8 +16,6 @@ A decentralized cryptocurrency candle prediction network built on Bittensor. Min
 - [Model Training](#-model-training)
 - [Prediction Files](#-prediction-files)
 - [Scoring System](#-scoring-system)
-- [Network Information](#-network-information)
-- [Quick Links](#-quick-links)
 - [Contact](#-contact)
 
 ---
