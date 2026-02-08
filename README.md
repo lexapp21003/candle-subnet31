@@ -1,27 +1,118 @@
-<div align="center">
-  <img src="candles_sn31.png" alt="Candles Subnet" width="250" />
-</div>
+# 🕯️ Candles Subnet [Subnet ID: SN31]
 
-# Candles Subnet
+A decentralized cryptocurrency candle prediction network built on Bittensor. Miners compete to predict cryptocurrency price movements (candle colors and closing values) for TAO-USD across multiple time intervals, while validators score predictions against real market data.
 
-A decentralized cryptocurrency candle prediction network built on Bittensor. Miners compete to predict cryptocurrency price movements (candle colors and values), while validators score predictions against real market data.
+[Discord](https://discord.gg/MTZP7CJQ) • [Web Interface](https://www.candlestao.com/)
 
+---
 
+## 📚 Table of Contents
+- [About](#-about)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Configuration](#-configuration)
+- [Model Training](#-model-training)
+- [Prediction Files](#-prediction-files)
+- [Scoring System](#-scoring-system)
+- [Network Information](#-network-information)
+- [Quick Links](#-quick-links)
+- [Contact](#-contact)
 
-## 🏗️ How It Works
+---
 
-- **Miners**: Generate predictions for cryptocurrency candles (price direction and closing values)
-- **Validators**: Request predictions from miners and score them against actual market data
-- **Rewards**: Miners are rewarded based on prediction accuracy (both color and price proximity)
+## 🧩 About
 
-### Prediction Types
-- **Hourly**: Next hour candle predictions
-- **Daily**: Next day candle predictions
-- **Weekly**: Next week candle predictions
+Candles Subnet is a decentralized prediction market for cryptocurrency price movements on the Bittensor network. The subnet incentivizes miners to develop and deploy accurate prediction models for TAO-USD candle data across hourly, daily, and weekly intervals.
 
-## 📦 Installation
+**Vision**: Create a competitive marketplace where miners leverage machine learning, technical analysis, and market insights to generate accurate price predictions, rewarded through Bittensor's incentive mechanism.
+
+**Key Principles**:
+- **Decentralized**: Open participation for miners worldwide to compete in prediction accuracy
+- **Multi-Interval**: Support for hourly, daily, and weekly prediction horizons
+- **Transparent**: Predictions are scored against real market data from CoinDesk
+- **Continuous**: 24/7 operation with automatic prediction updates
+- **Incentivized**: Economic rewards based on prediction accuracy (both color and price proximity)
+
+---
+
+## ✨ Features
+
+- **Multi-Interval Predictions**: Generate predictions for hourly, daily, and weekly candle intervals
+- **Flexible Prediction Sources**: 
+  - Use trained LSTM models (via training pipeline)
+  - Provide custom CSV prediction files
+  - Fallback to random predictions for testing
+- **Model Training Pipeline**: Complete training infrastructure in `train/` directory
+  - LSTM-based neural network architecture
+  - Support for hourly, daily, and weekly model variants
+  - Data normalization and preprocessing
+  - Historical data fetching from CoinDesk API
+- **Automated Prediction Generation**: Continuous prediction updates using trained models
+- **File-Based Predictions**: Easy integration with external prediction systems via CSV files
+- **Real-time Scoring**: Validators score predictions against actual market data
+- **Bittensor Integration**: Native integration with Bittensor network for rewards and consensus
+
+---
+
+## 🧠 Tech Stack
+
+- **Languages**: Python 3.12+
+- **Blockchain**: Bittensor (Subnet 31)
+- **AI/ML Frameworks**: 
+  - PyTorch (for LSTM model training and inference)
+  - Pandas (for data processing)
+- **Data Sources**: CoinDesk API (TAO-USD historical data)
+- **Package Management**: uv (recommended) or pip
+- **Process Management**: PM2 (optional, for production)
+
+---
+
+## ⚙️ Installation
 
 ### Prerequisites
+
+- Python 3.12 or higher
+- Bittensor wallet
+- Rust (required for Bittensor)
+- Astral uv package manager
+
+### System Requirements
+
+- CPU: 2+ cores (4+ recommended for model training)
+- RAM: 8 GB (16 GB recommended for model training)
+- Storage: 10 GB free space (SSD recommended)
+- GPU: Optional but recommended for model training (CUDA-compatible)
+- OS: Ubuntu 20.04+ or similar Linux distribution
+
+### Quick Setup (Automated)
+
+The easiest way to set up your miner is using the automated setup script:
+
+```bash
+# Clone the repository
+git clone https://github.com/CandlesTAO/candles.git
+cd candles
+
+# Run the setup script with your wallet and hotkey names
+./setup_miner.sh <wallet_name> <hotkey_name>
+
+# Example:
+./setup_miner.sh my_wallet my_hotkey
+```
+
+The setup script will:
+- Install system dependencies
+- Set up Python environment with uv
+- Install project dependencies
+- Create a custom miner script for your wallet/hotkey
+- Run tests to verify installation
+
+
+### Manual Installation
+
+If you prefer manual setup:
 
 1. **Install Rust** (required for Bittensor):
    ```bash
@@ -35,111 +126,173 @@ A decentralized cryptocurrency candle prediction network built on Bittensor. Min
    source ~/.local/bin/env
    ```
 
-3. **Python 3.12+** is required
-
-### Quick Miner Setup
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/CandlesTAO/candles
-   cd candles
-   ```
-
-2. **Use the automated setup script**:
-   ```bash
-   ./setup_miner.sh <wallet_name> <hotkey_name>
-   ```
-
-   Example:
-   ```bash
-   ./setup_miner.sh my_wallet my_hotkey
-   ```
-
-   This script will:
-   - Install system dependencies
-   - Set up Python environment with uv
-   - Install project dependencies
-   - Create a custom miner script for your wallet/hotkey
-   - Run tests to verify installation
-> [!NOTE]  
-   > If you have issues with running your miner after using the setup script it is likely because you have an ipv6 address. You can fix this by running the following command:
-   > ```bash
-   > curl -4 ifconfig.me
-   > ```
-   > Update your external_ip in the miner script to use the ipv4 address (if you have an ipv6 address)
-
-3. **Start your miner**:
-   ```bash
-   ./miner_<wallet_name>_<hotkey_name>
-   ```
-
-   **Run with PM2** (recommended for production):
-   ```bash
-   # Install PM2 globally
-   npm install -g pm2
-
-   # Start miner with PM2 using ecosystem config
-   pm2 start ecosystem.config.js
-
-   # Monitor running processes
-   pm2 status
-   pm2 logs
-   ```
-
-### Manual Installation
-
-If you prefer manual setup:
-
-1. **Install dependencies**:
+3. **Install dependencies**:
    ```bash
    uv sync
    ```
 
-2. **Run tests**:
+4. **Run tests**:
    ```bash
-   uv run pytest
+   uv run pytest tests/ --asyncio-mode=auto
    ```
 
-3. **Start miner**:
-   ```bash
-   ./miner
-   ```
+### Bittensor Wallet Setup
 
-4. **Start validator** (if running a validator):
-   ```bash
-   cp .example.env .env # update the variables
-   ./validator
-   ```
+1. Create your Bittensor wallet if you haven't already
+2. Register your miner:
+   - Testnet: `btcli subnets register --network test --netuid 357`
+   - Mainnet: `btcli subnets register --netuid 31`
 
-## 🔧 Development
+---
 
-### Linting
+## 🚀 Usage
+
+### Running on Testnet
+
+*Always test your miner on Testnet #357 first*
+
 ```bash
-./scripts/ruff.sh
+# Activate the virtual environment (if using manual setup)
+source .venv/bin/activate
+
+# Start the miner (using custom script from setup)
+./miner_<wallet_name>_<hotkey_name> \
+  --subtensor.network test \
+  --netuid 357 \
+  --wallet.name YOUR_WALLET_NAME \
+  --wallet.hotkey YOUR_HOTKEY_NAME \
+  --logging.debug \
+  --axon.port LOCAL_PORT \
+  --axon.external_port EXTERNAL_PORT \
+  --axon.external_ip EXTERNAL_IP
 ```
 
-### Testing
+Ensure the external endpoint is accessible by validators and check for error logs. You'll start receiving prediction requests shortly.
+
+### Running on Mainnet
+
 ```bash
-uv run pytest tests/ --asyncio-mode=auto
+# Register on SN31 (if not already registered)
+btcli subnets register --netuid 31
+
+# Start the miner with PM2 (recommended for production)
+npm install -g pm2
+pm2 start ecosystem.config.js
+
+# Or run directly
+./miner_<wallet_name>_<hotkey_name>
 ```
+
+### Prediction Methods
+
+The miner supports three methods for generating predictions:
+
+1. **File-Based Predictions** (Recommended): Place CSV files in `~/.candles/data/` or use the web interface at [candlestao.com](https://www.candlestao.com/)
+2. **Model-Based Predictions**: Use the training pipeline to generate predictions with trained LSTM models
+3. **Random Predictions**: Fallback method for testing (not recommended for production)
+
+---
+
+## 🧾 Configuration
 
 ### Environment Variables
 
-For validators, set:
+Create a `.env` file in the project root (optional):
+
 ```bash
-export COINDESK_API_KEY="your_api_key_here"
+# For validators (not required for miners)
+COINDESK_API_KEY=your_coindesk_api_key_here
 ```
 
-For miners using prediction files, optionally set:
+### Miner Configuration
+
+Key configuration parameters when running the miner:
+
+- `--netuid`: Subnet ID (357 for testnet, 31 for mainnet)
+- `--wallet.name`: Your Bittensor wallet name
+- `--wallet.hotkey`: Your Bittensor hotkey name
+- `--axon.port`: Local port for the miner endpoint (default: 8092)
+- `--axon.external_port`: External port (must be accessible by validators)
+- `--axon.external_ip`: Your public IP address
+- `--blacklist.validator_min_stake`: Minimum stake required for validators (default: 0)
+- `--logging.debug`: Enable debug logging
+- `--neuron.epoch_length`: Epoch length in blocks (default: 50)
+
+### Example Configuration
+
 ```bash
-export PREDICTIONS_FILE_PATH="/path/to/your/predictions.csv"
+uv run candles/miner/miner.py \
+  --axon.external_ip YOUR_IP_ADDRESS \
+  --netuid 31 \
+  --axon.port 8091 \
+  --wallet.name miner \
+  --wallet.hotkey miner_default \
+  --blacklist.validator_min_stake 0 \
+  --logging.info \
+  --neuron.epoch_length 50
 ```
 
-## 🔮 Custom Prediction Files
+---
+
+## 🤖 Model Training
+
+The `train/` directory contains a complete training pipeline for LSTM-based candle prediction models.
+
+### Training Overview
+
+The training system supports three model variants:
+- **Hourly Model**: Predicts next hour candle (10-minute intervals)
+- **Daily Model**: Predicts next day candle (4-hour intervals)
+- **Weekly Model**: Predicts next week candle (1-day intervals)
+
+### Training Steps
+
+1. **Download Historical Data**:
+   ```bash
+   cd train
+   # Update config.py to set dataset_type: 'hourly', 'daily', or 'weekly'
+   python download.py
+   ```
+
+2. **Normalize Data**:
+   ```bash
+   python normalization.py
+   ```
+
+3. **Train Model**:
+   ```bash
+   python train.py
+   ```
+
+4. **Generate Predictions**:
+   ```bash
+   python prediction.py
+   ```
+
+The `prediction.py` script runs continuously and:
+- Fetches latest TAO-USD data from CoinDesk API
+- Generates predictions using trained models
+- Saves predictions to `~/.candles/data/` in CSV format
+- Updates predictions automatically (hourly every 30 min, daily every 12 hours, weekly every 3 days)
+
+### Model Architecture
+
+- **Architecture**: LSTM (Long Short-Term Memory) neural network
+- **Input Features**: close, high, low, volume, volume_top_tier, volume_direct
+- **Input Length**: 
+  - Hourly: 144 timesteps (24 hours of 10-minute intervals)
+  - Daily: 120 timesteps (20 days of 4-hour intervals)
+  - Weekly: 70 timesteps (10 weeks of 1-day intervals)
+- **Output**: Predicted closing prices for future intervals
+- **Training**: Adam optimizer with learning rate scheduling
+
+---
+
+## 🔮 Prediction Files
 
 Miners can provide their own predictions instead of using random generation by placing CSV files in specific locations. The miner will automatically detect and use these files when available.
 
-### 🌐 Web Interface for Predictions Generation
+### Web Interface for Predictions Generation
 
 Create and download prediction CSV files easily using the web interface at:
 **[candlestao.com](https://www.candlestao.com/)**
@@ -148,7 +301,6 @@ This web tool allows you to generate properly formatted prediction files without
 
 ### File Placement Options
 
-**Option 1: Default Directory (Recommended)**
 ```bash
 # Create the candles data directory
 mkdir -p ~/.candles/data/
@@ -157,12 +309,6 @@ mkdir -p ~/.candles/data/
 ~/.candles/data/hourly_predictions.csv   # For hourly predictions
 ~/.candles/data/daily_predictions.csv    # For daily predictions
 ~/.candles/data/weekly_predictions.csv   # For weekly predictions
-```
-
-**Option 2: Custom Path via Environment Variable**
-```bash
-# Set a custom file path (applies to all intervals)
-export PREDICTIONS_FILE_PATH="/path/to/your/predictions.csv"
 ```
 
 ### CSV File Format
@@ -186,7 +332,6 @@ timestamp,color,confidence,price
 
 1. **File Discovery**: The miner searches for prediction files in this order:
    - `~/.candles/data/[interval]_predictions.csv` (e.g., `hourly_predictions.csv`)
-   - File specified by `PREDICTIONS_FILE_PATH` environment variable
    - If no files found, generates random predictions
 
 2. **Prediction Matching**: When a validator requests a prediction:
@@ -197,48 +342,55 @@ timestamp,color,confidence,price
 
 3. **Fallback Behavior**: If no prediction file is found or no matching prediction exists, the miner automatically generates random predictions to ensure continuous operation.
 
-### Example Setup
+---
 
-```bash
-# Create prediction directory
-mkdir -p ~/.candles/data/
+## 📊 Scoring System
 
-# Add your predictions to the directory
-cp hourly_predictions.csv ~/.candles/data/
+The scoring framework evaluates miners based on prediction accuracy:
 
-# Your miner will now use these predictions automatically
-./miner_<wallet_name>_<hotkey_name>
-```
+- **Color Accuracy**: Correctly predicting whether the candle will be red (price decrease) or green (price increase)
+- **Price Proximity**: How close the predicted closing price is to the actual closing price
+- **Confidence Calibration**: Confidence scores should reflect actual prediction accuracy
 
-## 🌐 Network Information
-
-   | Network  | netuid |
-   |----------|--------|
-   | mainnet  | 31     |
-   | testnet  | 357    |
-
-
-**Symbol**: TAO-USD (primary trading pair)
-
-## 📚 Documentation
-
-More comprehensive documentation is coming soon. For now, see:
-- `candles/` - Source code with inline documentation
-
-## 💬 Community
-
-Join our Discord server for support, updates, and community discussions:
-
-**[🕯️ Candles Discord Server](https://discord.gg/MTZP7CJQ)**
-
-## 🤝 Contributing
-
-This project is in active development. Contributions, feedback, and bug reports are welcome!
-
-## 📄 License
-
-MIT License - see LICENSE file for details.
+**Performance Expectations**:
+- Higher accuracy predictions receive more rewards
+- Consistent performance over time is rewarded
+- Predictions are scored against real market data from CoinDesk
 
 ---
 
-**🔥 Ready to predict the future of crypto? Join our subnet and start mining!**
+## 🖼 Screenshots
+
+<div align="center">
+
+![Candles Subnet](candles_sn31.png)
+
+</div>
+
+---
+
+## 📜 API Documentation
+
+The project uses Bittensor's synapse protocol. Key synapse types:
+
+- **GetCandlePrediction**: Main synapse sent by validators to miners requesting predictions
+  - Contains: `interval` (hourly/daily/weekly), `interval_id` (specific timestamp)
+  - Response: `CandlePrediction` with color, price, confidence, and metadata
+
+For detailed protocol definitions, see `candles/core/synapse.py` and `candles/core/data.py`.
+
+---
+
+## 📬 Contact
+
+- **Author**: OKS
+- **Email**: james.martin.aitechguy@gmail.com
+- **GitHub**: [@lexapp21003](https://github.com/lexapp21003)
+
+---
+
+## 🌟 Acknowledgements
+
+- Built on the [Bittensor](https://github.com/opentensor/bittensor) network
+- Market data provided by [CoinDesk](https://www.coindesk.com/)
+- Community contributions and feedback from miners and validators

@@ -3,9 +3,11 @@ import aiohttp
 import asyncio
 import csv
 import time
-
+import dotenv
 from config import config
+import os
 
+dotenv.load_dotenv()
 # interval = config['HOURLY_INTERVAL'] # hourly prediction
 # interval = config['DAILY_INTERVAL'] # daily prediction
 # interval = config['WEEKLY_INTERVAL'] # weekly prediction
@@ -20,7 +22,7 @@ elif config['dataset_type'] == 'weekly':
     PRICE_INFO_URL = f"https://data-api.coindesk.com/index/cc/v1/historical/days"
 
 async def fetch_tao_history():
-    api_key= "coindesk_api_key"  # Replace with your actual API key
+    api_key= os.getenv("COINDESK_API_KEY")  # Replace with your actual API key
     launch_date = datetime(2023, 12, 1, tzinfo=timezone.utc)
     now = datetime.now(timezone.utc)
     
